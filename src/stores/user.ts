@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import axios from "axios";
 import { useLocalStorage } from "@vueuse/core";
+import {
+    getToken,
+    setToken,
+    removeToken
+} from '~/composables/auth.ts'
 
 
 export interface UserInfo {
@@ -18,17 +23,21 @@ export const useUserStore = defineStore('user', {
     }),
     actions: {
         async login(payload: any) {
-            const { data } = await axios.post("/api/user/token/", payload)
+            const { data } = await axios.post("/api/user/token/", payload);
+            setToken(data.token)
             console.log(data)
-            // if (data.code == 400) {
-            //     ElMessage.error(data.message)
-            //     return
-            // }
-            // const { token } = data.data
-            // console.log(token)
         },
-        async getUserInfo(token: any) {
-            // console.log(token)
+        async getUserInfo() {
+            console.log(getToken())
+            console.log(getToken())
+            // const {data} =  await axios.get("/api/user/me/", {
+            //     Authorization: "token `{getToken()}`"
+            // })
+            // this.userInfo = data
         },
+        logout({ commit }) {
+            removeToken()
+            // commit("SET_USERINFO", {})
+        }
     },
 })

@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
+import Login from '../pages/auth/index.vue'
+import NotFound from '~/pages/404.vue'
 
 const routes = [
     {
@@ -10,6 +12,19 @@ const routes = [
             title: "肩部识别程序",
         }
     },
+    {
+        path: '/login',
+        name: "Login",
+        component: Login,
+        meta: {
+            title: "肩部识别程序",
+        }
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'NotFound',
+        component: NotFound
+    }
 ]
 
 

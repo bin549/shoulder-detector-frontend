@@ -1,13 +1,13 @@
 <script setup lang="ts">
+
 </script>
 
 <template>
   <div bg-white>
-    Hello Doctor!32
-    Hello Doctor!32
-    Hello Doctor!32
+    <slot />
   </div>
 </template>
 
 <style scoped>
+
 </style>
