@@ -9,10 +9,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "vue": "^3.3.4"
+    "@iconify-json/carbon": "^1.1.20",
+    "vue": "^3.3.4",
+    "naive-ui": "^2.34.4",
+    "pinia": "^2.1.6",
+    "@vueuse/core": "^10.3.0",
+    "axios": "^1.4.0",
+    "vue-router": "^4.2.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.2.3",
-    "vite": "^4.4.5"
+    "vite": "^4.4.5",
+    "@unocss/eslint-config": "^0.55.3",
+    "tsx": "^3.12.7",
+    "typescript": "^5.2.2",
+    "unocss": "^0.55.3",
+    "eslint": "^8.47.0"
   }
 }

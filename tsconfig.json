@@ -1,0 +1,44 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "useDefineForClassFields": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "preserve",
+    "jsxImportSource": "vue",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "suppressImplicitAnyIndexErrors": false,
+    "lib": [
+      "ESNext",
+      "DOM"
+    ],
+    "types": [
+      "vite/client",
+      "naive-ui/volar",
+      "vite-plugin-pages/client",
+      "vite-plugin-vue-layouts/client"
+    ],
+    "baseUrl": ".",
+    "skipLibCheck": true,
+    "paths": {
+      "~/*": [
+        "src/*"
+      ]
+    }
+  },
+  "include": [
+    "src",
+    "packages/markdown-renderer/src/parser/astToVue.ts"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
+  ]
+}
