@@ -1,5 +1,13 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
+import { useLogout } from "~/composables/useAuth.ts"
+import {
+  NButton
+} from "naive-ui"
+
+const {
+  handleLogout
+} = useLogout()
 
 onMounted(() => {
 })
@@ -12,6 +20,9 @@ onMounted(() => {
       <div style="align-items: center;justify-content: space-between;font-size: 1.5rem;">
         肩部检测在线网址
       </div>
+      <n-button type="tertiary" @click="handleLogout">
+        注销
+      </n-button>
     </div>
   </div>
 </template>

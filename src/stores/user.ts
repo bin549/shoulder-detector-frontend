@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from "axios";
 import { useLocalStorage } from "@vueuse/core";
+import {login} from "~/api/auth.ts"
 import {
     getToken,
     setToken,
@@ -22,10 +23,13 @@ export const useUserStore = defineStore('user', {
         userInfo: null,
     }),
     actions: {
-        async login(payload: any) {
-            const { data } = await axios.post("/api/user/token/", payload);
-            setToken(data.token)
-            console.log(data)
+        login(payload: any) {
+            return new Promise((resolve, reject) => {
+                 login(payload).then(res => {
+                    setToken(res.data.token)
+                    resolve(res)
+                }).catch(err => reject(err))
+            })
         },
         async getUserInfo() {
             console.log(getToken())
@@ -35,9 +39,5 @@ export const useUserStore = defineStore('user', {
             // })
             // this.userInfo = data
         },
-        logout({ commit }) {
-            removeToken()
-            // commit("SET_USERINFO", {})
-        }
     },
 })

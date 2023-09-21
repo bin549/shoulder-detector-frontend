@@ -4,6 +4,16 @@ import UnoCSS from 'unocss/vite'
 import path from 'node:path'
 
 export default defineConfig({
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vue: ['vue', 'vue-router', 'vue-i18n', 'naive-ui', '@vueuse/core', 'nanostores', '@nanostores/vue'],
+          highlight: ['highlight.js'],
+        },
+      },
+    },
+  },
   server: {
     proxy: {
       '/api': {

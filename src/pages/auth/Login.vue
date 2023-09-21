@@ -2,7 +2,9 @@
 import { onMounted, ref } from "vue";
 import { NButton, NInput } from "naive-ui";
 import { useUserStore } from "~/stores/user";
+import {useRouter} from "vue-router";
 const store = useUserStore()
+const router = useRouter()
 
 const email = ref<string>('')
 const password = ref<string>('')
@@ -11,6 +13,8 @@ function submitForm() {
   store.login({
     email: email.value,
     password: password.value,
+  }).then((res) => {
+    router.push("/")
   })
 }
 

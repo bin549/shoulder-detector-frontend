@@ -9,7 +9,7 @@ const routes = [
         name: "Home",
         component: Home,
         meta: {
-            title: "肩部识别程序",
+            title: "肩部识别程序-首页",
         }
     },
     {
@@ -17,7 +17,7 @@ const routes = [
         name: "Login",
         component: Login,
         meta: {
-            title: "肩部识别程序",
+            title: "肩部识别程序-登录页",
         }
     },
     {
@@ -28,7 +28,7 @@ const routes = [
 ]
 
 
-const router = createRouter({
+export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes
 })
