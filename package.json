@@ -3,31 +3,36 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts":   {
+  "scripts": {
     "dev": "vite --open",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@iconify-json/carbon": "^1.1.20",
-    "vue": "^3.3.4",
-    "naive-ui": "^2.34.4",
-    "pinia": "^2.1.6",
-    "nprogress": "^0.2.0",
     "@vueuse/core": "^10.3.0",
     "@vueuse/integrations": "^10.2.0",
-    "universal-cookie": "^4.0.4",
     "axios": "^1.4.0",
+    "naive-ui": "^2.34.4",
+    "nprogress": "^0.2.0",
+    "pinia": "^2.1.6",
+    "universal-cookie": "^4.0.4",
+    "vue": "^3.3.4",
     "vue-router": "^4.2.4",
     "vuex": "^4.1.0"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.2.3",
-    "vite": "^4.4.5",
+    "@ricons/ionicons5": "^0.12.0",
+    "@sicons/ionicons5": "^0.12.0",
     "@unocss/eslint-config": "^0.55.3",
+    "@vicons/ionicons5": "^0.12.0",
+    "@vicons/utils": "^0.1.4",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "eslint": "^8.47.0",
     "tsx": "^3.12.7",
     "typescript": "^5.2.2",
     "unocss": "^0.55.3",
-    "eslint": "^8.47.0"
+    "vfonts": "^0.0.3",
+    "vite": "^4.4.5"
   }
 }

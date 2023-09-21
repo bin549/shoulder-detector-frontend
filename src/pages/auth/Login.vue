@@ -1,24 +1,44 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import {onBeforeUnmount, onMounted, ref} from "vue";
 import { NButton, NInput } from "naive-ui";
 import { useUserStore } from "~/stores/user";
 import {useRouter} from "vue-router";
 const store = useUserStore()
 const router = useRouter()
+import { useNotification} from 'naive-ui'
+import { useMessage } from 'naive-ui'
 
-const email = ref<string>('')
+const message = useMessage()
+const username = ref<string>('')
 const password = ref<string>('')
 
 function submitForm() {
+  if (!username.value) {
+    message.warning("用户名不能为空", { duration: 1500 })
+    return
+  }
+  if (!password.value) {
+    message.warning("密码不能为空", { duration: 1500 })
+    return
+  }
+  message.success("登录成功", { duration: 500 })
   store.login({
-    email: email.value,
+    username: username.value,
     password: password.value,
   }).then((res) => {
     router.push("/")
   })
 }
 
+function onKeyUp(e) {
+  if (e.key == "Enter") submitForm()
+}
+
 onMounted(() => {
+  document.addEventListener("keyup", onKeyUp)
+})
+onBeforeUnmount(() => {
+  document.removeEventListener("keyup", onKeyUp)
 })
 </script>
 
@@ -33,8 +53,8 @@ onMounted(() => {
       <div justify-center items-center flex flex-row bg-white>
         <div class="login-content" @submit.prevent="submitForm">
           <div>
-            <span font-size-3 font-bold>请输入邮箱</span>
-            <n-input v-model:value="email" placeholder="" />
+            <span font-size-3 font-bold>请输入用户名</span>
+            <n-input v-model:value="username" placeholder="" />
           </div>
           <div>
             <span font-size-3 font-bold>请输入密码</span>

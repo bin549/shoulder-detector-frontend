@@ -11,7 +11,6 @@ export function useLogout() {
         //     logout().finally(() => {
                 store.dispatch("logout")
                 router.push("/login")
-        //         toast("退出登录成功")
         //     })
         // })
     }

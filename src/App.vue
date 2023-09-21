@@ -1,11 +1,17 @@
 <script setup lang="ts">
 import TheHeader from "./layout/TheHeader.vue";
+import {NNotificationProvider} from "naive-ui"
+import {NMessageProvider} from "naive-ui"
 
 </script>
 
 <template>
-  <the-header></the-header>
-  <router-view></router-view>
+  <n-message-provider>
+      <n-notification-provider>
+        <the-header></the-header>
+        <router-view></router-view>
+      </n-notification-provider>
+  </n-message-provider>
 </template>
 
 <style>

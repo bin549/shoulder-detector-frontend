@@ -5,9 +5,18 @@ import {
   NButton
 } from "naive-ui"
 
+import { useMessage } from "naive-ui"
+
+const message = useMessage()
+
 const {
   handleLogout
 } = useLogout()
+
+function logout() {
+  message.info("退出登录成功")
+  handleLogout()
+}
 
 onMounted(() => {
 })
@@ -20,7 +29,7 @@ onMounted(() => {
       <div style="align-items: center;justify-content: space-between;font-size: 1.5rem;">
         肩部检测在线网址
       </div>
-      <n-button type="tertiary" @click="handleLogout">
+      <n-button type="tertiary" @click="logout">
         注销
       </n-button>
     </div>
