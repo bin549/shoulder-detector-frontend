@@ -21,12 +21,14 @@ function submitForm() {
     message.warning("密码不能为空", { duration: 1500 })
     return
   }
-  message.success("登录成功", { duration: 500 })
   store.login({
     username: username.value,
     password: password.value,
   }).then((res) => {
+    message.success("登录成功", { duration: 500 })
     router.push("/")
+  }).catch((res) => {
+    message.error("用户名或者密码输入错误")
   })
 }
 
@@ -43,15 +45,15 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div class="login-card" bg-blue w-120 h-90 position-absolute flex flex-col gap-y-1 rounded-md px-8 py-4 shadow-md
+    <div class="login-card" bg-white w-120 h-90 position-absolute flex flex-col gap-y-1 rounded-md px-8 py-4 shadow-md
       backdrop-blur blur>
-      <div w-full h-2 flex-inline items-center justify-center bg-white b-black border-5 pb-12 pt-12>
+      <div w-full h-2 flex-inline items-center justify-center bg-black b-white border-5 c-white pb-12 pt-8>
         <div h-2 flex-inline items-center>
           <div font-size-6 font-bold>欢迎回来！</div>
         </div>
       </div>
-      <div justify-center items-center flex flex-row bg-white>
-        <div class="login-content" @submit.prevent="submitForm">
+      <div justify-center items-center flex flex-row bg-white h-50>
+        <div class="login-content" @submit.prevent="submitForm" w-full>
           <div>
             <span font-size-3 font-bold>请输入用户名</span>
             <n-input v-model:value="username" placeholder="" />
@@ -63,7 +65,8 @@ onBeforeUnmount(() => {
         </div>
       </div>
       <div w-full justify-center items-center flex flex-col bg-white mt-2>
-        <n-button type="primary" @click="submitForm" plain w-full>登录</n-button>
+        <n-button type="primary" @click="submitForm" plain w-full bg-black>登录</n-button>
+        <n-button type="primary" @click="submitForm" plain w-full bg-white c-black>注册</n-button>
       </div>
     </div>
 </template>

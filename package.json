@@ -24,6 +24,7 @@
   "devDependencies": {
     "@ricons/ionicons5": "^0.12.0",
     "@sicons/ionicons5": "^0.12.0",
+    "@types/node": "^20.6.3",
     "@unocss/eslint-config": "^0.55.3",
     "@vicons/ionicons5": "^0.12.0",
     "@vicons/utils": "^0.1.4",

@@ -46,6 +46,9 @@ devDependencies:
   '@sicons/ionicons5':
     specifier: ^0.12.0
     version: 0.12.0
+  '@types/node':
+    specifier: ^20.6.3
+    version: 20.6.3
   '@unocss/eslint-config':
     specifier: ^0.55.3
     version: 0.55.3(eslint@8.49.0)(typescript@5.2.2)
@@ -75,7 +78,7 @@ devDependencies:
     version: 0.0.3
   vite:
     specifier: ^4.4.5
-    version: 4.4.5
+    version: 4.4.5(@types/node@20.6.3)
 
 packages:
 
@@ -572,6 +575,10 @@ packages:
     resolution: {integrity: sha512-DssMqTV9UnnoxDWu959sDLZzfvqCF0qDNRjaWeYSui9xkFe61kKo4l1TWNTQONpuXEm+gLMRvdlzvNHBamzmEw==}
     dev: true
 
+  /@types/node@20.6.3:
+    resolution: {integrity: sha512-HksnYH4Ljr4VQgEy2lTStbCKv/P590tmPe5HqOnv9Gprffgv5WXAY+Y5Gqniu0GGqeTCUdBnzC3QSrzPkBkAMA==}
+    dev: true
+
   /@types/semver@7.5.2:
     resolution: {integrity: sha512-7aqorHYgdNO4DM36stTiGO3DvKoex9TQRwsJU6vMaFGyqpBA1MNZkz+PG3gaNUPpTAOYhT1WR7M1JyA3fbS9Cw==}
     dev: true
@@ -652,7 +659,7 @@ packages:
       '@unocss/core': 0.55.3
       '@unocss/reset': 0.55.3
       '@unocss/vite': 0.55.3(vite@4.4.5)
-      vite: 4.4.5
+      vite: 4.4.5(@types/node@20.6.3)
     transitivePeerDependencies:
       - rollup
     dev: true
@@ -856,7 +863,7 @@ packages:
       chokidar: 3.5.3
       fast-glob: 3.3.1
       magic-string: 0.30.3
-      vite: 4.4.5
+      vite: 4.4.5(@types/node@20.6.3)
     transitivePeerDependencies:
       - rollup
     dev: true
@@ -881,7 +888,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.4.5
+      vite: 4.4.5(@types/node@20.6.3)
       vue: 3.3.4
     dev: true
 
@@ -2468,7 +2475,7 @@ packages:
       '@unocss/transformer-directives': 0.55.3
       '@unocss/transformer-variant-group': 0.55.3
       '@unocss/vite': 0.55.3(vite@4.4.5)
-      vite: 4.4.5
+      vite: 4.4.5(@types/node@20.6.3)
     transitivePeerDependencies:
       - postcss
       - rollup
@@ -2499,7 +2506,7 @@ packages:
     resolution: {integrity: sha512-nguyw8L6Un8eelg1vQ31vIU2ESxqid7EYmy8V+MDeMaHBqaRSkg3dTBToC1PR00D89UzS/SLkfYPnx0Wf23IQQ==}
     dev: true
 
-  /vite@4.4.5:
+  /vite@4.4.5(@types/node@20.6.3):
     resolution: {integrity: sha512-4m5kEtAWHYr0O1Fu7rZp64CfO1PsRGZlD3TAB32UmQlpd7qg15VF7ROqGN5CyqN7HFuwr7ICNM2+fDWRqFEKaA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -2527,6 +2534,7 @@ packages:
       terser:
         optional: true
     dependencies:
+      '@types/node': 20.6.3
       esbuild: 0.18.20
       postcss: 8.4.29
       rollup: 3.29.2

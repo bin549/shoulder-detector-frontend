@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', {
     actions: {
         login(payload: any) {
             return new Promise((resolve, reject) => {
-                 login(payload).then(res => {
+                 login(payload).then((res) => {
                     setToken(res.data.token)
                     resolve(res)
                 }).catch(err => reject(err))

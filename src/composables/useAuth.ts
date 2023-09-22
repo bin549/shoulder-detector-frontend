@@ -1,4 +1,4 @@
-import { logout } from "~/api/manager.ts"
+import { logout } from "~/api/auth.ts"
 import { showModal, toast } from "~/composables/util.ts"
 import { useRouter } from "vue-router"
 import { useStore } from "vuex"
