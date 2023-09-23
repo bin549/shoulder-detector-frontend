@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import {NSpin, NIcon, NModal, NSpace, NUpload, NUploadDragger, NText } from "naive-ui"
-import {CloudUploadOutline } from '@vicons/ionicons5'
-import {Reload } from '@vicons/ionicons5'
+import { NSpin, NIcon, NModal, NSpace, NUpload, NUploadDragger, NText } from "naive-ui"
+import { CloudUploadOutline } from '@vicons/ionicons5'
+import { Reload } from '@vicons/ionicons5'
 import { Icon } from '@vicons/utils'
-import {ref} from "vue";
+import { ref } from "vue";
 import type { UploadFileInfo } from 'naive-ui'
-import {getExamination} from "~/api/examination.ts"
-import {login} from "~/api/auth";
-import {setToken} from "~/composables/auth";
+import { getExamination } from "~/api/examination.ts"
+import { login } from "~/api/auth";
+import { setToken } from "~/composables/auth";
 
 const previewFileList = ref<UploadFileInfo[]>([
   // {
@@ -28,7 +28,7 @@ const previewImageUrlRef = ref("~/assets/5383acee-58e5-11ee-9587-0242ac130003.pn
 const isFinishUpload = ref(false)
 const isStartUpload = ref(false)
 
-function handlePreview (file: UploadFileInfo) {
+function handlePreview(file: UploadFileInfo) {
   const { url } = file
   previewImageUrlRef.value = url as string
   isFinishUpload.value = true
@@ -46,8 +46,8 @@ function onUploadFinish() {
 </script>
 
 <template>
-  <div bc-black b-3 flex flex-justify-center mt-30 >
-    <div c-black style="width: 60%;" >
+  <div bc-black b-3 flex flex-justify-center mt-30>
+    <div c-black style="width: 60%;">
       <n-space justify="space-around" size="large" class="doctor-img" v-if="!isStartUpload">
         <img src="src/assets/doctor-1.png" />
       </n-space>
@@ -56,13 +56,8 @@ function onUploadFinish() {
       </n-space>
       <n-image></n-image>
       <n-space justify="space-around" size="large">
-        <n-upload
-            action="/api/examination/savefile/"
-            :default-file-list="previewFileList"
-            @change="onUploadStart"
-            @finish="onUploadFinish"
-            mt-5
-        >
+        <n-upload action="/api/examination/savefile/" :default-file-list="previewFileList" @change="onUploadStart"
+          @finish="onUploadFinish" mt-5>
           <n-upload-dragger v-if="!isStartUpload">
             <div>
               <n-icon size="14" :depth="3">
@@ -73,13 +68,8 @@ function onUploadFinish() {
           </n-upload-dragger>
         </n-upload>
       </n-space>
-      <n-modal
-          v-model:show="isFinishUpload"
-          preset="card"
-          style="width: 1200px"
-          title=" "
-          @close="isStartUpload = false;"
-      >
+      <n-modal v-model:show="isFinishUpload" preset="card" style="width: 1200px" title=" "
+        @close="isStartUpload = false;">
         <img src="src/assets/5383acee-58e5-11ee-9587-0242ac130003.png" style="width: 100%">
       </n-modal>
     </div>
@@ -97,6 +87,7 @@ function onUploadFinish() {
 
 
 @keyframes floatBubbles {
+
   0%,
   100% {
     transform: translateY(0);
@@ -108,6 +99,7 @@ function onUploadFinish() {
 }
 
 @keyframes floatBubblesX {
+
   0%,
   100% {
     transform: translateX(0);
@@ -117,5 +109,4 @@ function onUploadFinish() {
     transform: translateX(-10px);
   }
 }
-
 </style>

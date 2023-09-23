@@ -1,6 +1,6 @@
 
 import nprogress from 'nprogress'
-import { useNotification} from 'naive-ui'
+import { useNotification } from 'naive-ui'
 
 const notification = useNotification()
 

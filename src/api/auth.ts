@@ -6,3 +6,17 @@ export function login(payload) {
         payload
     )
 }
+
+export function createUser(payload) {
+    return axios.post("/api/user/create/",
+        payload
+    )
+}
+
+export function sendEmailCaptcha(query) {
+    return axios({
+        url: '/api/user/email_captcha/',
+        method: 'get',
+        params: query
+    })
+}

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useLogout } from "~/composables/useAuth.ts"
+import { getToken } from "~/composables/auth";
+
 import {
   NButton
 } from "naive-ui"
@@ -31,7 +33,7 @@ onMounted(() => {
           肩部检测在线网址
         </div>
       </div>
-      <n-button type="tertiary" @click="logout" c-white absolute right-30 w-20 h-10>
+      <n-button v-if="getToken()" type="tertiary" @click="logout" c-white absolute right-30 w-20 h-10>
         注销
       </n-button>
     </div>

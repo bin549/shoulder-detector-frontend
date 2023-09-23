@@ -9,8 +9,8 @@ export function useLogout() {
     function handleLogout() {
         // showModal("是否要退出登录？").then(res => {
         //     logout().finally(() => {
-                store.dispatch("logout")
-                router.push("/login")
+        store.dispatch("logout")
+        router.push("/login")
         //     })
         // })
     }
