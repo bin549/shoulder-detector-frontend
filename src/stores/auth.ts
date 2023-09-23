@@ -37,6 +37,5 @@ export const useAuthStore = defineStore('auth', {
                 }).catch(err => reject(err))
             })
         },
-
     },
 })

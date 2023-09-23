@@ -83,7 +83,7 @@ function submitForm() {
   //   } else {
   //     if (captcha.value !== receive_captcha.value.toString().padStart(6, '0')) {
   //       message.warning("验证码输入错误", { duration: 1500 })
-  //       return
+  //       return 
   //     }
   //   }
   // }
@@ -128,9 +128,9 @@ function submitForm() {
         <div>
           <span font-size-3 font-bold>邮箱验证码</span>
           <div flex flex-row>
-            <n-input v-model:value="captcha" placeholder="" />
-            <n-button v-if="timeout_captcha === -1" type="tertiary" color="#000000" @click="sendCaptchaCode" plain w-28 flex
-              flex-row flex-justify-center>
+            <n-input v-model:value="captcha" placeholder="" :maxlength="6" />
+            <n-button v-if="timeout_captcha === -1" type="tertiary" color="#000000" @click="sendCaptchaCode" plain w-28
+              flex flex-row flex-justify-center>
               发送验证码
             </n-button>
             <n-button v-else-if="timeout_captcha === 0" @click="sendCaptchaCode()">
@@ -141,7 +141,7 @@ function submitForm() {
         </div>
         <div>
           <span font-size-3 font-bold>密码</span>
-          <n-input v-model:value="password" placeholder="" />
+          <n-input v-model:value="password" placeholder="" type="password" show-password-on="mousedown" />
         </div>
       </div>
     </div>

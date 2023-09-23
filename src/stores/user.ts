@@ -10,6 +10,7 @@ import {
 
 
 export interface UserInfo {
+    id: string,
     email: string,
     username: string,
 }
@@ -32,12 +33,12 @@ export const useUserStore = defineStore('user', {
             })
         },
         async getUserInfo() {
-            console.log(getToken())
-            console.log(getToken())
-            // const {data} =  await axios.get("/api/user/me/", {
-            //     Authorization: "token `{getToken()}`"
-            // })
-            // this.userInfo = data
+            const {data} =  await axios.get("/api/user/me/", {
+                headers: {
+                    Authorization: `token ${getToken()}`
+                }
+            })
+            this.userInfo = data
         },
     },
 })

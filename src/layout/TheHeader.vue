@@ -8,6 +8,7 @@ import {
 } from "naive-ui"
 
 import { useMessage } from "naive-ui"
+import router from "~/router";
 
 const message = useMessage()
 
@@ -33,6 +34,9 @@ onMounted(() => {
           肩部检测在线网址
         </div>
       </div>
+      <n-button v-if="getToken()" type="tertiary" @click="router.push('/')" c-white absolute right-52 w-20 h-10>
+        首页
+      </n-button>
       <n-button v-if="getToken()" type="tertiary" @click="logout" c-white absolute right-30 w-20 h-10>
         注销
       </n-button>

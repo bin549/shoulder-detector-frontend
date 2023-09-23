@@ -28,6 +28,7 @@ function submitForm() {
     password: password.value,
   }).then((res) => {
     message.success("登录成功", { duration: 500 })
+    store.getUserInfo()
     router.push("/")
   }).catch((res) => {
     message.error("用户名或者密码输入错误")
@@ -70,7 +71,7 @@ onBeforeUnmount(() => {
         </div>
         <div>
           <span font-size-4 font-bold>请输入密码</span>
-          <n-input v-model:value="password" placeholder="" />
+          <n-input v-model:value="password" placeholder="" type="password" show-password-on="mousedown" />
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import Login from '../pages/auth/index.vue'
+import Gallery from '~/pages/gallery/index.vue'
 import NotFound from '~/pages/404.vue'
 
 const routes = [
@@ -16,6 +17,14 @@ const routes = [
         path: '/login',
         name: "Login",
         component: Login,
+        meta: {
+            title: "肩部识别程序-登录页",
+        }
+    },
+    {
+        path: '/gallery',
+        name: "Gallery",
+        component: Gallery,
         meta: {
             title: "肩部识别程序-登录页",
         }
