@@ -52,10 +52,10 @@ function onUploadFinish() {
   <div bc-black b-3 flex flex-justify-center mt-30>
     <div c-black style="width: 60%;">
       <n-space justify="space-around" size="large" class="doctor-img" v-if="!isStartUpload">
-        <img src="src/assets/doctor-1.png" />
+<!--        <img src="~/assets/doctor-1.png" />-->
       </n-space>
       <n-space justify="space-around" size="large" class="report-img" v-else>
-        <img src="src/assets/case-report-1.png" />
+<!--        <img src="~/assets/case-report-1.png" />-->
       </n-space>
       <n-image></n-image>
       <n-space justify="space-around" size="large">

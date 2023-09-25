@@ -8,8 +8,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vue: ['vue', 'vue-router', 'vue-i18n', 'naive-ui', '@vueuse/core', 'nanostores', '@nanostores/vue'],
-          highlight: ['highlight.js'],
+          vue: ['vue', 'vue-router', 'naive-ui', '@vueuse/core'],
         },
       },
     },
