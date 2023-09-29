@@ -18,7 +18,7 @@ const menus = [{
   title: "检测记录",
   name: "examination-page"
 }, {
-  title: "患者记录",
+  title: "患者管理",
   name: "patient-page"
 }]
 
@@ -55,7 +55,11 @@ function navigate(item) {
 }
 
 .center-menu li {
-  @apply px-5 py-3 text-sm cursor-pointer hover: (bg-blue-50);
+  @apply px-5 py-3 text-sm cursor-pointer;
+}
+
+.center-menu li:hover {
+  font-size: 15px;
 }
 
 .center-menu .active {
