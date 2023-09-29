@@ -2,10 +2,11 @@
 import {NIcon, NModal, NSelect, NUpload, NUploadDragger, NText, NImage} from "naive-ui"
 import {CloudUploadOutline} from '@vicons/ionicons5'
 import type {UploadFileInfo} from 'naive-ui'
-import {fetchExamination, getExamination} from "~/api/examination.ts"
-import router from "~/router";
-import {onMounted, ref} from "vue";
-import {useUserStore} from "~/stores/user";
+import {fetchExamination, fetchExaminationType, getExamination} from "~/api/examination.ts"
+import {fetchPatient} from "~/api/patient.ts"
+import router from "~/router"
+import {onMounted, ref} from "vue"
+import {useUserStore} from "~/stores/user"
 
 const store = useUserStore()
 
@@ -104,17 +105,26 @@ function onUploadFinish() {
   })
 }
 
-const images = ref<any>()
+
+async function initOptions() {
+  await fetchPatient({ user_id: store.userInfo.id }).then((res: any) => {
+     console.log(res.data)
+  })
+  await fetchExaminationType().then((res: any) => {
+     console.log(res.data)
+  })
+}
 
 async function doRefresh() {
   await fetchExamination({ user_id: store.userInfo.id }).then((res: any) => {
-    images.value = res.data
+    // images.value = res.data
   })
-  console.log(images.value)
+  // console.log(images.value)
 }
 
 onMounted(() => {
-  doRefresh()
+  initOptions()
+  // doRefresh()
 })
 
 </script>
@@ -134,8 +144,8 @@ onMounted(() => {
         <div c-white>类型</div>
         <n-select v-model:value="examinationTypeValue" :options="examinationTypeOptions" w-30 placeholder=""/>
       </div>
-      <n-upload action="http://yl5545.f3322.org:4080/api/examination/savefile/" :data="{ user_id: store.userInfo.id }"
-                :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" w-30>
+      <n-upload action="http://yl5545.f3322.org:4080/api/examination/upload/" :data="{ user_id: store.userInfo.id }"
+                :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" w-30 :disabled="!patientValue || !examinationTypeValue">
         <n-upload-dragger v-if="!isStartUpload">
           <div>
             <n-icon size="14" :depth="3">
