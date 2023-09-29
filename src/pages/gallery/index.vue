@@ -16,12 +16,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <div bc-black b-3 flex flex-justify-center mt-30>
-    <div c-black style="width: 80%;">
-      <n-space justify="space-around" size="large">
-        <n-image width="200" v-for="image in images" :src="image.output_image" />
-      </n-space>
-    </div>
+  <div w-full>
+    <n-space >
+      <n-image width="150" v-for="image in images" :src="image.output_image" />
+    </n-space>
   </div>
 </template>
 

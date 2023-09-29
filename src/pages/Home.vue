@@ -1,100 +1,66 @@
 <script setup lang="ts">
-import { NIcon, NModal, NSpace, NUpload, NUploadDragger, NText } from "naive-ui"
-import { CloudUploadOutline } from '@vicons/ionicons5'
-import { ref } from "vue";
-import type { UploadFileInfo } from 'naive-ui'
-import { getExamination } from "~/api/examination.ts"
+import {computed, ref} from "vue";
 import { useUserStore } from "~/stores/user";
-import router from "~/router";
+import {useRoute} from "vue-router";
+import Gallery from "./gallery/index.vue"
 
+import Examination from "./examination/index.vue"
+import {
+  NGrid,
+  NGridItem
+} from "naive-ui"
+
+const route = useRoute()
 const store = useUserStore()
+const activeName = ref<string>("examination-page")
 
-const previewFileList = ref<UploadFileInfo[]>([
-  // {
-  //   id: 'react',
-  //   name: '我是react.png',
-  //   status: 'finished',
-  //   url: 'https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg'
-  // }
-])
-const fileList = ref<UploadFileInfo[]>([
-  // {
-  //   id: 'the',
-  //   name: 'The',
-  //   status: 'finished'
-  // }
-])
-const previewImageUrlRef = ref("~/assets/5383acee-58e5-11ee-9587-0242ac130003.png")
-const isFinishUpload = ref(false)
-const isStartUpload = ref(false)
+const menus = [{
+  title: "检测记录",
+  name: "examination-page"
+}, {
+  title: "患者记录",
+  name: "patient-page"
+}]
 
-function handlePreview(file: UploadFileInfo) {
-  const { url } = file
-  previewImageUrlRef.value = url as string
-  isFinishUpload.value = true
+function navigate(item) {
+  activeName.value = item.name
 }
-
-function onUploadStart() {
-  isStartUpload.value = true
-}
-
-function onUploadFinish() {
-  getExamination({ user_id: store.userInfo.id }).then((res) => {
-    previewImageUrlRef.value = res.data[0]["output_image"]
-  }).finally(() => {
-    isFinishUpload.value = true
-  })
-}
-
 </script>
 
 <template>
-  <div bc-black b-3 flex flex-justify-center mt-30>
-    <div c-black style="width: 60%;">
-      <n-space justify="space-around" size="large" class="doctor-img" v-if="!isStartUpload">
-<!--        <img src="~/assets/doctor-1.png" />-->
-      </n-space>
-      <n-space justify="space-around" size="large" class="report-img" v-else>
-<!--        <img src="~/assets/case-report-1.png" />-->
-      </n-space>
-      <n-image></n-image>
-      <n-space justify="space-around" size="large">
-        <n-upload action="/api/examination/savefile/" :data="{ user_id: store.userInfo.id }"
-          :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" mt-5>
-          <n-upload-dragger v-if="!isStartUpload">
-            <div>
-              <n-icon size="14" :depth="3">
-                <cloud-upload-outline />
-              </n-icon>
-              <n-text>请上传骨骼图片</n-text>
-            </div>
-          </n-upload-dragger>
-        </n-upload>
-      </n-space>
-      <n-space justify="space-around" size="large">
-        <n-button @click="router.push('/gallery')">
-          <div>
-            <n-text>查看检测记录</n-text>
-          </div>
-        </n-button>
-      </n-space>
-      <n-modal v-model:show="isFinishUpload" preset="card" style="width: 1200px" title=" "
-        @close="isStartUpload = false;">
-        <img :src="previewImageUrlRef" style="width: 100%">
-      </n-modal>
-    </div>
+  <div flex justify-center>
+    <n-grid :x-gap="20" style="width: 70%;" mt-22 >
+      <n-grid-item :span="5">
+        <ul class="center-menu">
+          <li :class="{
+                    'active': (item.name == activeName)
+                }" v-for="(item, index) in menus" :key="index" @click="navigate(item)">
+            {{ item.title }}
+          </li>
+        </ul>
+      </n-grid-item>
+      <n-grid-item :span="19" mt-3>
+        <div class="bg-white rounded mb-10 !min-h-[75vh]">
+          <Examination v-if="activeName=='examination-page'"/>
+          <Gallery v-if="activeName=='patient-page'"/>
+        </div>
+      </n-grid-item>
+    </n-grid>
   </div>
 </template>
 
 <style scoped>
-.doctor-img {
-  animation: floatBubbles 3s ease-in-out infinite;
+.center-menu {
+  @apply list-none bg-white rounded;
 }
 
-.report-img {
-  animation: floatBubblesX 1s ease-in-out infinite;
+.center-menu li {
+  @apply px-5 py-3 text-sm cursor-pointer hover: (bg-blue-50);
 }
 
+.center-menu .active {
+  @apply font-bold text-black-500 bg-white-200;
+}
 
 @keyframes floatBubbles {
 
