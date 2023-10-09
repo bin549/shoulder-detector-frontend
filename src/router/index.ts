@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../pages/Home.vue'
 import Login from '../pages/auth/index.vue'
-import Gallery from '~/pages/gallery/index.vue'
+import Gallery from '~/pages/patient/index.vue'
 import NotFound from '~/pages/404.vue'
 
 const routes = [
@@ -22,7 +22,7 @@ const routes = [
         }
     },
     {
-        path: '/gallery',
+        path: '/patient',
         name: "Gallery",
         component: Gallery,
         meta: {

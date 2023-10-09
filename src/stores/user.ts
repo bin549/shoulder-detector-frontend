@@ -27,6 +27,9 @@ export const useUserStore = defineStore('user', {
         login(payload: any) {
             return new Promise((resolve, reject) => {
                  login(payload).then((res) => {
+                     console.log(res.data.token)
+                     console.log(res.data.token)
+                     console.log(res.data.token)
                     setToken(res.data.token)
                     resolve(res)
                 }).catch(err => reject(err))
@@ -39,6 +42,7 @@ export const useUserStore = defineStore('user', {
                 }
             })
             this.userInfo = data
+            console.log(this.userInfo)
         },
     },
 })

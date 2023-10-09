@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import {NIcon, NModal, NSelect, NUpload, NUploadDragger, NText, NImage} from "naive-ui"
 import {CloudUploadOutline} from '@vicons/ionicons5'
-import type {UploadFileInfo} from 'naive-ui'
 import {fetchExamination, fetchExaminationType, getExamination} from "~/api/examination.ts"
 import {fetchPatient} from "~/api/patient.ts"
 import router from "~/router"
 import {onMounted, ref} from "vue"
 import {useUserStore} from "~/stores/user"
+import type {UploadFileInfo} from 'naive-ui'
 
 const store = useUserStore()
 
@@ -86,6 +86,7 @@ const imageGroups = ref<any>([
     }]
   },
 ])
+const images = ref<any>([])
 
 function handlePreview(file: UploadFileInfo) {
   const {url} = file
@@ -117,14 +118,13 @@ async function initOptions() {
 
 async function doRefresh() {
   await fetchExamination({ user_id: store.userInfo.id }).then((res: any) => {
-    // images.value = res.data
+    images.value = res.data
   })
-  // console.log(images.value)
 }
 
 onMounted(() => {
   initOptions()
-  // doRefresh()
+  doRefresh()
 })
 
 </script>
@@ -144,7 +144,7 @@ onMounted(() => {
         <div c-white>类型</div>
         <n-select v-model:value="examinationTypeValue" :options="examinationTypeOptions" w-30 placeholder=""/>
       </div>
-      <n-upload action="http://yl5545.f3322.org:4080/api/examination/upload/" :data="{ user_id: store.userInfo.id }"
+      <n-upload action="http://127.0.0.1:4080/api/examination/upload/" :data="{ user_id: store.userInfo.id }"
                 :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" w-30 :disabled="!patientValue || !examinationTypeValue">
         <n-upload-dragger v-if="!isStartUpload">
           <div>
@@ -157,8 +157,8 @@ onMounted(() => {
       </n-upload>
     </div>
     <div>
-      <div>
-        <div>2012年</div>
+      <div b-black bg-white>
+        <div>2023-10-08(周日）</div>
         <n-grid :x-gap="20" :cols="4">
           <n-gi v-for="(item, index) in images" :key="index">
             <n-image width="150" :src="item.output_image" />
@@ -166,7 +166,7 @@ onMounted(() => {
         </n-grid>
       </div>
       <div>
-        <div>2012年</div>
+        <div>2023-10-09(周一）</div>
         <n-image width="150" v-for="image in images" :src="image.output_image" />
       </div>
       <div>

@@ -26,11 +26,11 @@ function submitForm() {
   store.login({
     username: username.value,
     password: password.value,
-  }).then((res) => {
+  }).then((res: any) => {
     message.success("登录成功", { duration: 500 })
     store.getUserInfo()
     router.push("/")
-  }).catch((res) => {
+  }).catch((res: any) => {
     message.error("用户名或者密码输入错误")
   })
 }

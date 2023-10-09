@@ -2,7 +2,7 @@
 import {computed, ref} from "vue";
 import { useUserStore } from "~/stores/user";
 import {useRoute} from "vue-router";
-import Gallery from "./gallery/index.vue"
+import Patient from "~/pages/patient/index.vue"
 
 import Examination from "./examination/index.vue"
 import {
@@ -42,7 +42,7 @@ function navigate(item) {
       <n-grid-item :span="19" mt-3>
         <div class="bg-white rounded mb-10 !min-h-[75vh]">
           <Examination v-if="activeName=='examination-page'"/>
-          <Gallery v-if="activeName=='patient-page'"/>
+          <Patient v-if="activeName=='patient-page'"/>
         </div>
       </n-grid-item>
     </n-grid>
