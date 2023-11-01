@@ -2,15 +2,18 @@
 import TheHeader from "./layout/TheHeader.vue";
 import {NNotificationProvider} from "naive-ui"
 import {NMessageProvider} from "naive-ui"
+import {NDialogProvider} from "naive-ui"
 
 </script>
 
 <template>
   <n-message-provider>
-      <n-notification-provider>
+    <n-notification-provider>
+      <n-dialog-provider>
         <the-header></the-header>
         <router-view></router-view>
-      </n-notification-provider>
+      </n-dialog-provider>
+    </n-notification-provider>
   </n-message-provider>
 </template>
 

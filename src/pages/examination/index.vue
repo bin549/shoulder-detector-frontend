@@ -128,6 +128,7 @@ async function initOptions() {
 async function doRefresh() {
   await fetchExamination({user_id: store.userInfo.id}).then((res: any) => {
     images.value = res.data
+    // restruct -> [ { date: ??; imgs: []} , { date: ??; imgs: []} ,{ date: ??; imgs: []} ]
   })
 }
 
