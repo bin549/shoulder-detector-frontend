@@ -121,8 +121,18 @@ async function initOptions() {
   await fetchExaminationType().then((res: any) => {
   })
 }
+import { useMessage, SelectOption } from 'naive-ui'
+const message = useMessage()
+async function handleUpdateValue(value: string, option: SelectOption) {
+  selectedPatient.value = value
+  doRefresh()
+}
 
 async function doRefresh() {
+  console.log(selectedPatient.value)
+  console.log(selectedPatient.value)
+  console.log(selectedPatient.value)
+  console.log(selectedPatient.value)
   is_loading.value = true
   await fetchExamination({
     user_id: store.userInfo.id,
@@ -158,7 +168,7 @@ onMounted(async () => {
   <div flex flex-row bg-white h-full gap-x-5>
     <div flex flex-row>
       <div c-white>患者</div>
-      <n-select @change="doRefresh" v-model:value="selectedPatient" :options="patientOptions" w-30 placeholder=""/>
+      <n-select @update:value="handleUpdateValue" v-model:value="selectedPatient" :options="patientOptions" w-30 placeholder=""/>
     </div>
     <div flex flex-row>
       <div c-white>类型</div>
@@ -166,6 +176,21 @@ onMounted(async () => {
     </div>
   </div>
   <n-divider/>
+<!--  <n-form-item-gi :span="12" label="Radio Group" path="radioGroupValue">-->
+<!--    <n-radio-group v-model:value="model.radioGroupValue" name="radiogroup1">-->
+<!--      <n-space>-->
+<!--        <n-radio value="Radio 1">-->
+<!--          Radio 1-->
+<!--        </n-radio>-->
+<!--        <n-radio value="Radio 2">-->
+<!--          Radio 2-->
+<!--        </n-radio>-->
+<!--        <n-radio value="Radio 3">-->
+<!--          Radio 3-->
+<!--        </n-radio>-->
+<!--      </n-space>-->
+<!--    </n-radio-group>-->
+<!--  </n-form-item-gi>-->
   <n-upload action="http://127.0.0.1:4080/api/examination/upload/" :data="{ user_id: store.userInfo.id }"
             :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" w-30
             :disabled="!selectedPatient || !examinationTypeValue">
@@ -181,7 +206,7 @@ onMounted(async () => {
   <n-divider />
   <n-spin size="large" v-if="is_loading" flex justify-center mt-40/>
   <div v-else>
-    <div v-if="!display_images.length===0">
+    <div v-if="images.length===0">
       <n-empty size="large" description="暂无记录">
         <template #extra>
         </template>

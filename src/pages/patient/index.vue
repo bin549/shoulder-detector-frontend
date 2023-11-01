@@ -153,7 +153,7 @@ onMounted(async () => {
       </div>
     </div>
     <div w-full bg-white flex justify-center absolute style="bottom: 0px;">
-      <n-pagination v-model:page="page" :page-count="total_page" @change="doRefresh()"/>
+      <n-pagination v-model:page="page" :page-count="total_page" @update:page="doRefresh()"/>
     </div>
   </div>
 </template>
