@@ -14,6 +14,7 @@ import {
 const route = useRoute()
 const store = useUserStore()
 const activeName = ref<string>("examination-page")
+const init_patient_id = ref<string>("0")
 
 const menus = [{
   title: "检测记录",
@@ -21,13 +22,21 @@ const menus = [{
 }, {
   title: "患者管理",
   name: "patient-page"
-}, {
-  title: "系统设置",
-  name: "system-page"
-}]
+}
+  // , {
+  //   title: "系统设置",
+  //   name: "system-page"
+  // }
+  ]
 
 function navigate(item) {
   activeName.value = item.name
+  init_patient_id.value = "0"
+}
+
+function handleCheckPatient(patient_id) {
+  init_patient_id.value = patient_id
+  activeName.value = "examination-page"
 }
 </script>
 
@@ -45,9 +54,9 @@ function navigate(item) {
       </n-grid-item>
       <n-grid-item :span="19" mt-3>
         <div class="bg-white rounded mb-10 !min-h-[75vh]">
-          <Examination v-if="activeName=='examination-page'"/>
-          <Patient v-if="activeName=='patient-page'"/>
-          <System v-if="activeName=='system-page'"/>
+          <Examination :init_patient_id="init_patient_id" v-if="activeName=='examination-page'"/>
+          <Patient @checkPatient="handleCheckPatient" v-if="activeName=='patient-page'"/>
+<!--          <System v-if="activeName=='system-page'"/>-->
         </div>
       </n-grid-item>
     </n-grid>
