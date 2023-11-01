@@ -3,6 +3,7 @@ import {computed, ref} from "vue";
 import { useUserStore } from "~/stores/user";
 import {useRoute} from "vue-router";
 import Patient from "~/pages/patient/index.vue"
+import System from "~/pages/system/index.vue"
 
 import Examination from "./examination/index.vue"
 import {
@@ -20,6 +21,9 @@ const menus = [{
 }, {
   title: "患者管理",
   name: "patient-page"
+}, {
+  title: "系统设置",
+  name: "system-page"
 }]
 
 function navigate(item) {
@@ -43,6 +47,7 @@ function navigate(item) {
         <div class="bg-white rounded mb-10 !min-h-[75vh]">
           <Examination v-if="activeName=='examination-page'"/>
           <Patient v-if="activeName=='patient-page'"/>
+          <System v-if="activeName=='system-page'"/>
         </div>
       </n-grid-item>
     </n-grid>

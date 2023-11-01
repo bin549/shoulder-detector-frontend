@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {NIcon, NModal, NSelect, NUpload, NUploadDragger, NText, NImage} from "naive-ui"
+import {NIcon, NModal, NSelect, NUpload, NUploadDragger, NText, NImage, NGridItem, NGrid} from "naive-ui"
 import {CloudUploadOutline} from '@vicons/ionicons5'
 import {fetchExamination, fetchExaminationType, getExamination} from "~/api/examination.ts"
 import {fetchPatient} from "~/api/patient.ts"
@@ -40,21 +40,30 @@ const patientOptions = ref<any>([
     value: 'song2'
   },
 ])
-const examinationTypeValue = ref<any>("song1")
+const examinationTypeValue = ref<string>('all')
 const examinationTypeOptions = ref<any>([
   {
+    id: 0,
+    label: '全部',
+    value: 'all'
+  },
+  {
+    id: 1,
     label: '术前',
     value: 'song1'
   },
   {
+    id: 2,
     label: '术后即刻',
     value: 'song2'
   },
   {
+    id: 3,
     label: '术后半年',
     value: 'song3'
   },
   {
+    id: 4,
     label: '术后一年',
     value: 'song4'
   },
@@ -67,11 +76,11 @@ const imageGroups = ref<any>([
       src: "",
       name: "",
       time: "",
-    },{
+    }, {
       src: "",
       name: "",
       time: "",
-    },{
+    }, {
       src: "",
       name: "",
       time: "",
@@ -108,16 +117,16 @@ function onUploadFinish() {
 
 
 async function initOptions() {
-  await fetchPatient({ user_id: store.userInfo.id }).then((res: any) => {
-     console.log(res.data)
+  await fetchPatient({user_id: store.userInfo.id}).then((res: any) => {
+    console.log(res.data)
   })
   await fetchExaminationType().then((res: any) => {
-     console.log(res.data)
+    console.log(res.data)
   })
 }
 
 async function doRefresh() {
-  await fetchExamination({ user_id: store.userInfo.id }).then((res: any) => {
+  await fetchExamination({user_id: store.userInfo.id}).then((res: any) => {
     images.value = res.data
   })
 }
@@ -134,53 +143,48 @@ onMounted(() => {
            @close="isStartUpload = false;">
     <img :src="previewImageUrlRef" style="width: 100%">
   </n-modal>
-  <div flex flex-col gap-y-25>
-    <div flex flex-row bg-black h-10 gap-x-5>
-      <div flex flex-row>
-        <div c-white>患者</div>
-        <n-select v-model:value="patientValue" :options="patientOptions" w-30 placeholder=""/>
-      </div>
-      <div flex flex-row>
-        <div c-white>类型</div>
-        <n-select v-model:value="examinationTypeValue" :options="examinationTypeOptions" w-30 placeholder=""/>
-      </div>
-      <n-upload action="http://127.0.0.1:4080/api/examination/upload/" :data="{ user_id: store.userInfo.id }"
-                :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" w-30 :disabled="!patientValue || !examinationTypeValue">
-        <n-upload-dragger v-if="!isStartUpload">
-          <div>
-            <n-icon size="14" :depth="3">
-              <cloud-upload-outline/>
-            </n-icon>
-            <n-text>上传</n-text>
-          </div>
-        </n-upload-dragger>
-      </n-upload>
+  <div flex flex-row bg-black h-10 gap-x-5>
+    <div flex flex-row>
+      <div c-white>患者</div>
+      <n-select v-model:value="patientValue" :options="patientOptions" w-30 placeholder=""/>
     </div>
-    <div>
+    <div flex flex-row>
+      <div c-white>类型</div>
+      <n-select v-model:value="examinationTypeValue" :options="examinationTypeOptions" w-30 placeholder=""/>
+    </div>
+  </div>
+  <n-upload action="http://127.0.0.1:4080/api/examination/upload/" :data="{ user_id: store.userInfo.id }"
+            :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" w-30
+            :disabled="!patientValue || !examinationTypeValue">
+    <n-upload-dragger v-if="!isStartUpload">
+      <div>
+        <n-icon size="14" :depth="3">
+          <cloud-upload-outline/>
+        </n-icon>
+        <n-text>上传</n-text>
+      </div>
+    </n-upload-dragger>
+  </n-upload>
+  <div mt-1 justify-center flex>
+    <div w-full>
       <div b-black bg-white>
         <div>2023-10-08(周日）</div>
-        <n-grid :x-gap="20" :cols="4">
-          <n-gi v-for="(item, index) in images" :key="index">
-            <n-image width="150" :src="item.output_image" />
-          </n-gi>
-        </n-grid>
       </div>
-      <div>
-        <div>2023-10-09(周一）</div>
-        <n-image width="150" v-for="image in images" :src="image.output_image" />
-      </div>
-      <div>
-        <div>2012年</div>
-        <n-image width="150" v-for="image in images" :src="image.output_image" />
-      </div>
-      <div>
-        <div>2012年</div>
-        <n-image width="150" v-for="image in images" :src="image.output_image" />
-      </div>
+      <n-grid :x-gap="12" :y-gap="8" :cols="4">
+        <n-grid-item v-for="(item, index) in images" :key="index">
+          <div h-35 flex flex-col>
+            <n-image width="160" :src="item.output_image"/>
+            <div flex flex-row gap-y-1>
+              <p>RTL:232</p>
+              <p>CSA:3232</p>
+              <p>AI:32</p>
+            </div>
+          </div>
+        </n-grid-item>
+      </n-grid>
     </div>
   </div>
 </template>
 
 <style scoped>
-
 </style>
