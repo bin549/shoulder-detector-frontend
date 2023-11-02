@@ -11,7 +11,10 @@ import {
   NGrid,
   NDivider,
   NSpin,
-  NEmpty
+  NEmpty,
+  NRadioGroup,
+  NRadio,
+  NSpace,
 } from "naive-ui"
 import {CloudUploadOutline} from '@vicons/ionicons5'
 import {fetchExamination, fetchExaminationType, getExamination} from "~/api/examination.ts"
@@ -50,34 +53,10 @@ const patientOptions = ref<any>([
     value: '0'
   },
 ])
-const examinationTypeValue = ref<string>('all')
-const examinationTypeOptions = ref<any>([
-  {
-    id: 0,
-    label: '全部',
-    value: 'all'
-  },
-  {
-    id: 1,
-    label: '术前',
-    value: 'song1'
-  },
-  {
-    id: 2,
-    label: '术后即刻',
-    value: 'song2'
-  },
-  {
-    id: 3,
-    label: '术后半年',
-    value: 'song3'
-  },
-  {
-    id: 4,
-    label: '术后一年',
-    value: 'song4'
-  },
-])
+const selectedExaminationType = ref<string>('0')
+const examinationTypeOptions = ref<any>([])
+const selectedExaminationTypeOptions = ref<any>([])
+const selectedUploadedExaminationType = ref(null)
 
 const display_images = ref<any>([])
 const images = ref<any>([])
@@ -95,13 +74,10 @@ function onUploadStart() {
   isStartUpload.value = true
 }
 
-function onUploadFinish() {
-  getExamination({user_id: store.userInfo.id}).then((res) => {
-    previewImageUrlRef.value = res.data[0]["output_image"]
-    doRefresh()
-  }).finally(() => {
-    isFinishUpload.value = true
-  })
+async function onUploadFinish() {
+  await doRefresh()
+  previewImageUrlRef.value = images.value[0]["output_image"]
+  isFinishUpload.value = true
 }
 
 async function initOptions() {
@@ -119,27 +95,42 @@ async function initOptions() {
     selectedPatient.value = props.init_patient_id.toString()
   })
   await fetchExaminationType().then((res: any) => {
+    examinationTypeOptions.value = res.data.map((examination_type: any) => ({
+      value: examination_type.id.toString(),
+      label: examination_type.name,
+    }));
+    selectedExaminationTypeOptions.value = Array.from(examinationTypeOptions.value)
+    examinationTypeOptions.value.unshift({
+      label: '全部',
+      value: '0'
+    })
+    selectedExaminationType.value = examinationTypeOptions.value[0].value.toString()
   })
+
 }
-import { useMessage, SelectOption } from 'naive-ui'
+
+import {useMessage, SelectOption} from 'naive-ui'
+
 const message = useMessage()
-async function handleUpdateValue(value: string, option: SelectOption) {
+
+async function onPatientChange(value: string, option: SelectOption) {
   selectedPatient.value = value
   doRefresh()
 }
 
+async function onExaminationChange(value: string, option: SelectOption) {
+  selectedExaminationType.value = value
+  doRefresh()
+}
+
 async function doRefresh() {
-  console.log(selectedPatient.value)
-  console.log(selectedPatient.value)
-  console.log(selectedPatient.value)
-  console.log(selectedPatient.value)
   is_loading.value = true
   await fetchExamination({
     user_id: store.userInfo.id,
     patient_id: selectedPatient.value,
+    examination_type_id: selectedExaminationType.value,
   }).then((res: any) => {
     images.value = res.data
-    // restruct -> [ { date: ??; imgs: []} , { date: ??; imgs: []} ,{ date: ??; imgs: []} ]
   })
   display_images.value = images.value.reduce((result, obj) => {
     const date = obj.create_time.split("T")[0];
@@ -163,47 +154,53 @@ onMounted(async () => {
 <template>
   <n-modal v-model:show="isFinishUpload" preset="card" style="width: 1200px" title=" "
            @close="isStartUpload = false;">
-    <img :src="previewImageUrlRef" style="width: 100%">
+    <img :src="previewImageUrlRef" w-full>
   </n-modal>
   <div flex flex-row bg-white h-full gap-x-5>
     <div flex flex-row>
       <div c-white>患者</div>
-      <n-select @update:value="handleUpdateValue" v-model:value="selectedPatient" :options="patientOptions" w-30 placeholder=""/>
+      <n-select @update:value="onPatientChange" v-model:value="selectedPatient" :options="patientOptions" w-30
+                placeholder=""/>
     </div>
     <div flex flex-row>
       <div c-white>类型</div>
-      <n-select v-model:value="examinationTypeValue" :options="examinationTypeOptions" w-30 placeholder=""/>
+      <n-select @update:value="onExaminationChange" v-model:value="selectedExaminationType"
+                :options="examinationTypeOptions" w-30 placeholder=""/>
     </div>
   </div>
   <n-divider/>
-<!--  <n-form-item-gi :span="12" label="Radio Group" path="radioGroupValue">-->
-<!--    <n-radio-group v-model:value="model.radioGroupValue" name="radiogroup1">-->
-<!--      <n-space>-->
-<!--        <n-radio value="Radio 1">-->
-<!--          Radio 1-->
-<!--        </n-radio>-->
-<!--        <n-radio value="Radio 2">-->
-<!--          Radio 2-->
-<!--        </n-radio>-->
-<!--        <n-radio value="Radio 3">-->
-<!--          Radio 3-->
-<!--        </n-radio>-->
-<!--      </n-space>-->
-<!--    </n-radio-group>-->
-<!--  </n-form-item-gi>-->
-  <n-upload action="http://127.0.0.1:4080/api/examination/upload/" :data="{ user_id: store.userInfo.id }"
-            :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" w-30
-            :disabled="!selectedPatient || !examinationTypeValue">
-    <n-upload-dragger v-if="!isStartUpload">
-      <div>
-        <n-icon size="14" :depth="3">
-          <cloud-upload-outline/>
-        </n-icon>
-        <n-text>上传</n-text>
-      </div>
-    </n-upload-dragger>
-  </n-upload>
-  <n-divider />
+  <div flex justify-center flex-col gap-y-7>
+    <div flex justify-center font-bold font-size-6>
+      上传面板
+    </div>
+    <div flex justify-center>
+      <n-radio-group v-model:value="selectedUploadedExaminationType" name="radiogroup">
+        <n-space>
+          <n-radio
+              v-for="examinationTypeOption in selectedExaminationTypeOptions"
+              :key="examinationTypeOption.value"
+              :value="examinationTypeOption.value"
+              :label="examinationTypeOption.label"
+          />
+        </n-space>
+      </n-radio-group>
+    </div>
+    <div flex justify-center>
+      <n-upload action="http://127.0.0.1:4080/api/examination/upload/" :data="{ user_id: store.userInfo.id ,patient_id: selectedPatient,examination_type_id: selectedUploadedExaminationType}"
+                :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" w-30
+                :disabled="selectedPatient==='0' || !selectedUploadedExaminationType">
+        <n-upload-dragger v-if="!isStartUpload">
+          <div>
+            <n-icon size="14" :depth="3">
+              <cloud-upload-outline/>
+            </n-icon>
+            <n-text>上传</n-text>
+          </div>
+        </n-upload-dragger>
+      </n-upload>
+    </div>
+  </div>
+  <n-divider/>
   <n-spin size="large" v-if="is_loading" flex justify-center mt-40/>
   <div v-else>
     <div v-if="images.length===0">

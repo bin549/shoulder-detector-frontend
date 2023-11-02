@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import {NGrid, NGridItem, NImage, NCard, NModal, NSpin, NDivider, NPagination, NPopconfirm} from "naive-ui"
+import {NGrid, NGridItem, NImage, NCard, NModal, NSpin, NDivider, NPagination, NPopconfirm, NEmpty} from "naive-ui"
 import {onMounted, ref} from "vue";
-import {fetchExamination} from "~/api/examination.ts"
 import {fetchPatientByPage, createPatient, deletePatient} from "~/api/patient.ts"
 import {useUserStore} from "~/stores/user.ts";
+import {
+  FormInst,
+  FormRules
+} from 'naive-ui'
 
 
 const store = useUserStore()
-const previewImageUrlRef = ref(import("~/assets/doctor-1.png"))
 const patients = ref<any>([])
 import {useMessage, useDialog} from 'naive-ui'
 
@@ -20,13 +22,6 @@ function onCreatePatient() {
   showModal.value = true
 }
 
-import {
-  FormInst,
-  FormItemInst,
-  FormItemRule,
-  FormRules
-} from 'naive-ui'
-
 interface PatientModelType {
   name: string | null
   zone_id: number | null
@@ -34,7 +29,7 @@ interface PatientModelType {
 
 const page = ref<number>(1)
 const limit = ref<number>(15)
-const total_page = ref<number>(20)
+const total_page = ref<number>(0)
 const formRef = ref<FormInst | null>(null)
 const patientModel = ref<PatientModelType>({
   "name": "",
@@ -58,7 +53,8 @@ const rules: FormRules = {
 async function addPatient() {
   await createPatient({
     name: patientModel.value.name,
-    zone_id: patientModel.value.zone_id,
+    // zone_id: patientModel.value.zone_id,
+    user_id: store.userInfo.id,
   }).then((res: any) => {
     message.success("'添加患者成功")
     doRefresh()
@@ -109,9 +105,9 @@ onMounted(async () => {
         <n-form-item path="name" label="患者姓名">
           <n-input v-model:value="patientModel.name" placeholder="请输入患者姓名" @keydown.enter.prevent/>
         </n-form-item>
-        <n-form-item path="zone" label="住院信息">
-          <n-input v-model:value="patientModel.zone_id" placeholder="请输入住院信息" @keydown.enter.prevent/>
-        </n-form-item>
+<!--        <n-form-item path="zone" label="住院信息">-->
+<!--          <n-input v-model:value="patientModel.zone_id" placeholder="请输入住院信息" @keydown.enter.prevent/>-->
+<!--        </n-form-item>-->
         <div flex flex-end>
           <n-button
               :disabled="!patientModel.name"
@@ -131,25 +127,33 @@ onMounted(async () => {
         <n-button @click="onCreatePatient">新建患者</n-button>
         <n-divider/>
         <n-spin size="large" v-if="is_loading" flex justify-center mt-40/>
-        <n-grid :x-gap="12" :y-gap="10" :cols="5" v-else>
-          <n-grid-item v-for="(patient, index) in patients" :key="index">
-            <div flex flex-col bg-white border-dark border-8 relative>
-              <n-popconfirm :show-icon="false" @positive-click="handleRemovePatient(patient.id)">
-                <template #trigger>
-                  <div absolute style="right: 0; top: 0;" bg-gray w-4 h-4>
-                  </div>
-                </template>
-              </n-popconfirm>
-              <div flex justify-center w-30>
-                <img width="90" height="90" :src="patient.get_image"/>
+        <div v-else>
+          <div v-if="patients.length===0">
+            <n-empty size="large" description="暂无记录">
+              <template #extra>
+              </template>
+            </n-empty>
+          </div>
+          <n-grid :x-gap="12" :y-gap="10" :cols="5" v-else>
+            <n-grid-item v-for="(patient, index) in patients" :key="index">
+              <div flex flex-col bg-white border-dark border-8 relative>
+                <n-popconfirm :show-icon="false" @positive-click="handleRemovePatient(patient.id)">
+                  <template #trigger>
+                    <div absolute style="right: 0; top: 0;" bg-gray w-4 h-4>
+                    </div>
+                  </template>
+                </n-popconfirm>
+                <div flex justify-center w-30>
+                  <img width="90" height="90" :src="patient.get_image"/>
+                </div>
+                <div flex flex-col justify-center>
+                  <div flex justify-center>{{ patient.name ? patient.name : "NULL" }}</div>
+                  <n-button @click="emits('checkPatient', patient.id)">查看记录</n-button>
+                </div>
               </div>
-              <div flex flex-col justify-center>
-                <div flex justify-center>{{ patient.name ? patient.name : "NULL" }}</div>
-                <n-button @click="emits('checkPatient', patient.id)">查看记录</n-button>
-              </div>
-            </div>
-          </n-grid-item>
-        </n-grid>
+            </n-grid-item>
+          </n-grid>
+        </div>
       </div>
     </div>
     <div w-full bg-white flex justify-center absolute style="bottom: 0px;">
