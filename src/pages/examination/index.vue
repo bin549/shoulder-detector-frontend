@@ -44,6 +44,7 @@ const fileList = ref<UploadFileInfo[]>([
 const previewImageUrlRef = ref("")
 const isFinishUpload = ref(false)
 const isStartUpload = ref(false)
+const selectedPatientIndex = ref<number>(0)
 const is_upload_panel_display = ref(false)
 const is_loading = ref<boolean>(true)
 
@@ -150,9 +151,12 @@ async function doRefresh() {
 
 function onUploadBoneButtonClick() {
   is_upload_panel_display.value = true
-  const index = selectedExaminationTypeOptions.value.findIndex((examination_type: any) => examination_type.value === selectedExaminationType.value)
-  if (index !== -1)
-    selectedUploadedExaminationType.value = selectedExaminationTypeOptions.value[index].value
+  const selectedExaminationTypeIndex = selectedExaminationTypeOptions.value.findIndex((examination_type: any) => examination_type.value === selectedExaminationType.value)
+  selectedPatientIndex.value = patientOptions.value.findIndex((patient: any) => patient.value === selectedPatient.value)
+  if (selectedExaminationTypeIndex !== -1)
+    selectedUploadedExaminationType.value = selectedExaminationTypeOptions.value[selectedExaminationTypeIndex].value
+  // if (selectedPatientIndex !== -1)
+  //   selectedUploadedExaminationType.value = selectedExaminationTypeOptions.value[selectedExaminationTypeIndex].value
 }
 
 onMounted(async () => {
@@ -170,7 +174,7 @@ onMounted(async () => {
         上传面板
       </div>
       <div flex justify-center font-size-4>
-        患者：{{ patientOptions[selectedPatient].label }}
+        患者：{{ patientOptions[selectedPatientIndex].label }}
       </div>
       <div flex justify-center>
         <n-radio-group v-model:value="selectedUploadedExaminationType" name="radiogroup">
