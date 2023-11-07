@@ -44,6 +44,7 @@ const fileList = ref<UploadFileInfo[]>([
 const previewImageUrlRef = ref("")
 const isFinishUpload = ref(false)
 const isStartUpload = ref(false)
+const is_upload_panel_display = ref(false)
 const is_loading = ref<boolean>(true)
 
 const selectedPatient = ref<any>("0")
@@ -75,9 +76,13 @@ function onUploadStart() {
 }
 
 async function onUploadFinish() {
-  await doRefresh()
-  previewImageUrlRef.value = images.value[0]["output_image"]
-  isFinishUpload.value = true
+  if (images.value.length !== 0) {
+    previewImageUrlRef.value = images.value[0]["output_image"]
+    isFinishUpload.value = true
+  } else {
+    await doRefresh()
+  }
+  is_upload_panel_display.value = false
 }
 
 async function initOptions() {
@@ -106,7 +111,6 @@ async function initOptions() {
     })
     selectedExaminationType.value = examinationTypeOptions.value[0].value.toString()
   })
-
 }
 
 import {useMessage, SelectOption} from 'naive-ui'
@@ -144,6 +148,13 @@ async function doRefresh() {
   is_loading.value = false
 }
 
+function onUploadBoneButtonClick() {
+  is_upload_panel_display.value = true
+  const index = selectedExaminationTypeOptions.value.findIndex((examination_type: any) => examination_type.value === selectedExaminationType.value)
+  if (index !== -1)
+    selectedUploadedExaminationType.value = selectedExaminationTypeOptions.value[index].value
+}
+
 onMounted(async () => {
   await initOptions()
   await doRefresh()
@@ -152,53 +163,62 @@ onMounted(async () => {
 </script>
 
 <template>
+  <n-modal v-model:show="is_upload_panel_display" preset="card" style="width: 800px" title=" "
+           @close="is_upload_panel_display = false;" transform-origin="center">
+    <div flex justify-center flex-col gap-y-4>
+      <div flex justify-center font-bold font-size-6>
+        上传面板
+      </div>
+      <div flex justify-center font-size-4>
+        患者：{{ patientOptions[selectedPatient].label }}
+      </div>
+      <div flex justify-center>
+        <n-radio-group v-model:value="selectedUploadedExaminationType" name="radiogroup">
+          <n-space>
+            <n-radio
+                v-for="examinationTypeOption in selectedExaminationTypeOptions"
+                :key="examinationTypeOption.value"
+                :value="examinationTypeOption.value"
+                :label="examinationTypeOption.label"
+            />
+          </n-space>
+        </n-radio-group>
+      </div>
+      <div flex justify-center>
+        <n-upload action="http://127.0.0.1:4080/api/examination/upload/"
+                  :data="{ user_id: store.userInfo.id ,patient_id: selectedPatient,examination_type_id: selectedUploadedExaminationType}"
+                  :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" w-30
+                  :disabled="!selectedUploadedExaminationType">
+          <n-upload-dragger>
+            <div>
+              <n-icon size="14" :depth="3">
+                <cloud-upload-outline/>
+              </n-icon>
+              <n-text>上传</n-text>
+            </div>
+          </n-upload-dragger>
+        </n-upload>
+      </div>
+    </div>
+  </n-modal>
   <n-modal v-model:show="isFinishUpload" preset="card" style="width: 1200px" title=" "
-           @close="isStartUpload = false;">
+           @close="isStartUpload = false; doRefresh();">
     <img :src="previewImageUrlRef" w-full>
   </n-modal>
-  <div flex flex-row bg-white h-full gap-x-5>
+  <div flex flex-row bg-white h-full gap-x-5 pt-6>
     <div flex flex-row>
-      <div c-white>患者</div>
+      <h3 mt-1 ml-3 mr-3>检测患者:</h3>
       <n-select @update:value="onPatientChange" v-model:value="selectedPatient" :options="patientOptions" w-30
                 placeholder=""/>
     </div>
     <div flex flex-row>
-      <div c-white>类型</div>
+      <h3 mt-1 ml-1 mr-3>检测类型</h3>
       <n-select @update:value="onExaminationChange" v-model:value="selectedExaminationType"
                 :options="examinationTypeOptions" w-30 placeholder=""/>
     </div>
-  </div>
-  <n-divider/>
-  <div flex justify-center flex-col gap-y-7>
-    <div flex justify-center font-bold font-size-6>
-      上传面板
-    </div>
-    <div flex justify-center>
-      <n-radio-group v-model:value="selectedUploadedExaminationType" name="radiogroup">
-        <n-space>
-          <n-radio
-              v-for="examinationTypeOption in selectedExaminationTypeOptions"
-              :key="examinationTypeOption.value"
-              :value="examinationTypeOption.value"
-              :label="examinationTypeOption.label"
-          />
-        </n-space>
-      </n-radio-group>
-    </div>
-    <div flex justify-center>
-      <n-upload action="http://127.0.0.1:4080/api/examination/upload/" :data="{ user_id: store.userInfo.id ,patient_id: selectedPatient,examination_type_id: selectedUploadedExaminationType}"
-                :default-file-list="previewFileList" @change="onUploadStart" @finish="onUploadFinish" w-30
-                :disabled="selectedPatient==='0' || !selectedUploadedExaminationType">
-        <n-upload-dragger v-if="!isStartUpload">
-          <div>
-            <n-icon size="14" :depth="3">
-              <cloud-upload-outline/>
-            </n-icon>
-            <n-text>上传</n-text>
-          </div>
-        </n-upload-dragger>
-      </n-upload>
-    </div>
+    <n-button @click="onUploadBoneButtonClick" :disabled="selectedPatient==='0'">
+      上传骨骼
+    </n-button>
   </div>
   <n-divider/>
   <n-spin size="large" v-if="is_loading" flex justify-center mt-40/>
